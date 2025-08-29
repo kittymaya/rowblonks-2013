@@ -22,7 +22,7 @@ bool Config::fpsUnlocked;
 int Config::desiredFps;
 
 // this is to help prevent breaking physics
-static const std::array allowedFpsValues = { 30, 60, 120, 240 };
+static const std::array<int, 4> allowedFpsValues = { 30, 60, 120, 240 };
 
 bool Config::allowChangingScriptIdentities;
 
