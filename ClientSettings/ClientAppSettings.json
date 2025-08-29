@@ -6,9 +6,12 @@
     "FFlagMegaClusterChangeHistory": "True",
     "FFlagTerrainOptimizedCHS": "True",
     "FFlagValidateAssetUrlEnabled": "False",
-    "DE4510Fixed": "True",
-    "DE4528Fixed": "True",
-    "DE4640Fixed": "True",
-    "DE4411Fixed": "True",
-    "DE4508Fixed": "True"
+    "FFlagDE4510Fixed": "True",
+    "FFlagDE4528Fixed": "True",
+    "FFlagDE4640Fixed": "True",
+    "FFlagDE4411Fixed": "True",
+    "FFlagDE4508Fixed": "True",
+    "FFlagRenderLoopExplicit": "False",
+    "FFlagRenderGLES2": "True",
+    "FFlagRenderUseNPOTCaps": "False"
 }
