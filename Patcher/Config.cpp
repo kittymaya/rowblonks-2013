@@ -51,7 +51,7 @@ void Config::init()
 	fpsUnlocked = ini.GetBoolean("Rendering", "ExperimentalFpsUnlock", false);
 	desiredFps = ini.GetInteger("Rendering", "DesiredFps", 60);
 
-	auto fpsIt = std::upper_bound(allowedFpsValues.begin(), allowedFpsValues.end(), desiredFps);
+	auto fpsIt = std::lower_bound(allowedFpsValues.begin(), allowedFpsValues.end(), desiredFps);
 	if (fpsIt == allowedFpsValues.end())
 		desiredFps = *(fpsIt - 1);
 	else
