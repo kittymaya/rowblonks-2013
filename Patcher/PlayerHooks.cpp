@@ -61,9 +61,6 @@ CRobloxWnd__UserInputJob__sleepTime_t CRobloxWnd__UserInputJob__sleepTime_orig =
 
 void __fastcall CRobloxWnd__UserInputJob__sleepTime_hook(CRobloxWnd__UserInputJob* _this, void*, double* a2, int a3)
 {
-	double fps = 60.0;
-	if (Config::fpsUnlocked)
-		fps = Config::desiredFps;
-
-	RBX::DataModelJob__sleepTime(reinterpret_cast<RBX::DataModelJob*>(_this), a2, a3, fps);
+	RBX::DataModelJob__sleepTime(reinterpret_cast<RBX::DataModelJob*>(_this), a2, a3, 
+		Config::fpsUnlocked ? Config::desiredFps : 60.0);
 }

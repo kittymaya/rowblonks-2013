@@ -30,9 +30,9 @@ void Config::init()
 {
 	gameDirectory.resize(MAX_PATH);
 	GetModuleFileName(nullptr, &gameDirectory[0], MAX_PATH);
-	gameDirectory.resize(gameDirectory.rfind('\\'));
+	gameDirectory.resize(gameDirectory.rfind('\\') + 1);
 
-	INIReader ini(gameDirectory + "/cool.ini");
+	INIReader ini(gameDirectory + "cool.ini");
 
 	std::string assetOverrideList = ini.GetString("Game", "AssetOverrides", "");
 	if (!assetOverrideList.empty())

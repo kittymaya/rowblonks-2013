@@ -71,7 +71,6 @@ static const std::unordered_map<void*, void*> hooks = {
     { &InternetOpenA_orig, InternetOpenA_hook },
 };
 
-#ifdef _DEBUG
 static std::runtime_error patchError(const char* format, ...)
 {
 
@@ -89,9 +88,6 @@ static std::runtime_error patchError(const char* format, ...)
 
     return std::runtime_error(buffer);
 }
-#else
-#define patchError(...) (std::runtime_error(""))
-#endif
 
 static void initHooks()
 {
@@ -159,7 +155,6 @@ void Patches::init()
     // ===== disable ProgramMemoryChecker =====
     // SECURITY BYPASS
     // write a RET to the start of RBX::ProgramMemoryCheckerImpl::step
-    // this was needed in order to be able to enable ASLR
     fillBytes(reinterpret_cast<void*>(ADDRESS_PROGRAMMEMORYCHECKERIMPL_STEP), 0xC3, 1, PAGE_EXECUTE_READWRITE);
 #endif
 

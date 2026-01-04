@@ -58,16 +58,14 @@ RBX::ContentProvider__verifyScriptSignature_t RBX::ContentProvider__verifyScript
 // never require script signatures (1)
 const char* __cdecl RBX::ContentProvider__verifyScriptSignature_hook(const char* source, bool required)
 {
-	std::string copy = source;
-
-	if (copy.size() == 0 || copy[0] != '%')
+	if (source[0] != '%')
 		return source;
 
-	size_t endPos = copy.find('%', 1);
-	if (endPos == std::string::npos)
+	const char* end = std::strchr(source + 1, '%');
+	if (end == nullptr)
 		return source;
 
-	return &source[endPos + 1];
+	return end + 1;
 }
 
 RBX::ContentProvider__verifyRequestedScriptSignature_t RBX::ContentProvider__verifyRequestedScriptSignature_orig = 
@@ -88,7 +86,7 @@ RBX::DataModel__startCoreScripts_t RBX::DataModel__startCoreScripts_orig =
 // execute a local Studio.ashx
 void __fastcall RBX::DataModel__startCoreScripts_hook(DataModel* _this, void*, AdornRbxGfx* adorn, bool buildInGameGui)
 {
-	RBX::GuiBuilder__buildGui(&_this->guiBuilder, adorn, _this->workspace, buildInGameGui);
+	RBX::GuiBuilder__buildGui(reinterpret_cast<RBX::GuiBuilder*>(&_this->guiBuilderStart), adorn, _this->workspace, buildInGameGui);
 
 	char buf[RBX::ProtectedString::size];
 	auto source = RBX::ProtectedString__fromTrustedSource(buf, "loadfile('rbxasset://../extra/studio.lua')()");
@@ -172,7 +170,7 @@ void __fastcall RBX::RunService__step_hook(RBX::RunService* _this, void*, double
 	double a[2];
 	a[0] = elapsedTime;
 	a[1] = delta;
-	fireHeartbeatSignal(&_this->heartbeatSignal, a);
+	fireHeartbeatSignal(&_this->heartbeatSignalStart, a);
 
 	// this is a hack so that the Stepped event gets fired about 30 times per second
 	// some places were relying on this event to update the velocity of parts, causing 
@@ -183,6 +181,6 @@ void __fastcall RBX::RunService__step_hook(RBX::RunService* _this, void*, double
 	{
 		_this->elapsedTimeAtLastStep = elapsedTime;
 
-		fireSteppedSignal(&_this->steppedSignal, elapsedTime, steppedDelta);
+		fireSteppedSignal(&_this->steppedSignalStart, elapsedTime, steppedDelta);
 	}
 }

@@ -72,7 +72,7 @@ namespace RBX
 	class GuiBuilder;
 
 	const auto GuiBuilder__buildGui = 
-		reinterpret_cast<void(__thiscall*)(GuiBuilder** _this, AdornRbxGfx* adorn, Workspace* workspace, bool buildInGameGui)>(ADDRESS_GUIBUILDER_BUILDGUI);
+		reinterpret_cast<void(__thiscall*)(GuiBuilder* _this, AdornRbxGfx* adorn, Workspace* workspace, bool buildInGameGui)>(ADDRESS_GUIBUILDER_BUILDGUI);
 
 	// ===== `Players` class =====
 
@@ -126,7 +126,7 @@ namespace RBX
 	private:
 		char padding2[564];
 	public:
-		GuiBuilder* guiBuilder;
+		void* guiBuilderStart;
 	};
 
 	// HOOKED
@@ -224,11 +224,11 @@ namespace RBX
 	private:
 		char padding3[8];
 	public:
-		void* heartbeatSignal;
+		void* heartbeatSignalStart;
 	private:
 		char padding4[8];
 	public:
-		void* steppedSignal;
+		void* steppedSignalStart;
 	};
 
 	// HOOKED

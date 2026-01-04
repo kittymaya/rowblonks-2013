@@ -32,20 +32,14 @@ getPhysicsStepsPerSec_t getPhysicsStepsPerSec_orig = reinterpret_cast<getPhysics
 
 int __cdecl getPhysicsStepsPerSec_hook()
 {
-	if (Config::fpsUnlocked)
-		return Config::desiredFps;
-
-	return 30;
+	return Config::fpsUnlocked ? Config::desiredFps : 30;
 }
 
 getSecsPerPhysicsStep_t getSecsPerPhysicsStep_orig = reinterpret_cast<getSecsPerPhysicsStep_t>(ADDRESS_SECS_PER_PHYSICS_STEP);
 
 double __cdecl getSecsPerPhysicsStep_hook()
 {
-	if (Config::fpsUnlocked)
-		return 1.0 / static_cast<double>(Config::desiredFps);
-
-	return 1.0 / 30.0;
+	return 1.0 / static_cast<double>(getPhysicsStepsPerSec_hook());
 }
 
 // ===== fps fixes for MotorJoint and Motor6DJoint =====
@@ -53,7 +47,7 @@ double __cdecl getSecsPerPhysicsStep_hook()
 static float getAdjustedMaxVelocity(float maxVelocity)
 {
 	if (Config::fpsUnlocked)
-		return maxVelocity * 30.0f / static_cast<float>(Config::desiredFps);
+		maxVelocity *= 30.0f / static_cast<float>(Config::desiredFps);
 
 	return maxVelocity;
 }

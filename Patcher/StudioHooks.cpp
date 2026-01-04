@@ -10,7 +10,7 @@ computePropNullDerefFix_t computePropNullDerefFix_orig = reinterpret_cast<comput
 float __fastcall computePropNullDerefFix_hook(float* _this)
 {
 	if (_this)
-		return *(_this + 30);
+		return _this[30];
 
 	return 0.0f;
 }

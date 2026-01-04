@@ -7,8 +7,7 @@
 
 static int getThreadIdentity(lua_State* L)
 {
-	int identity = RobloxExtraSpace::get(L)->identity;
-	lua_pushinteger(L, identity);
+	lua_pushinteger(L, RobloxExtraSpace::get(L)->identity);
 	return 1;
 }
 
@@ -17,8 +16,7 @@ static int setThreadIdentity(lua_State* L)
 	if (!Config::allowChangingScriptIdentities)
 		luaL_error(L, "no");
 
-	int identity = luaL_checkinteger(L, 1);
-	RobloxExtraSpace::get(L)->identity = identity;
+	RobloxExtraSpace::get(L)->identity = luaL_checkinteger(L, 1);
 
 	return 0;
 }
@@ -98,7 +96,7 @@ static int registerLocalLibrary(lua_State* L)
 
 	// script objects can only be registered as a library if their source property is set
 	// so we have to read the library file ourselves and set the property
-	std::string path = Config::gameDirectory + "/extra/libraries/" + name + ".lua";
+	std::string path = Config::gameDirectory + "extra/libraries/" + name + ".lua";
 	std::ifstream sourceFile(path);
 	sourceStream << sourceFile.rdbuf();
 	sourceFile.close();
@@ -134,11 +132,9 @@ static int produceGameChat(lua_State* L)
 {
 	std::string message = luaL_checkstring(L, 1);
 
-	auto dataModel = Lua::getDataModel(L);
-	if (dataModel)
+	if (auto dataModel = Lua::getDataModel(L))
 	{
-		auto players = RBX::DataModel__find__Players(dataModel);
-		if (players)
+		if (auto players = RBX::DataModel__find__Players(dataModel))
 			RBX::Players__gameChat(players, message);
 	}
 
