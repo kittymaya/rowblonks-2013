@@ -184,3 +184,56 @@ void __fastcall RBX::RunService__step_hook(RBX::RunService* _this, void*, double
 		fireSteppedSignal(&_this->steppedSignalStart, elapsedTime, steppedDelta);
 	}
 }
+
+// ===== `RBX::NetworkSettings` member function hooks =====
+
+RBX::NetworkSettings__setDataSendRate_t RBX::NetworkSettings__setDataSendRate_orig =
+reinterpret_cast<RBX::NetworkSettings__setDataSendRate_t>(ADDRESS_NETWORKSETTINGS_SETDATASENDRATE);
+
+static const auto dataSendRatePropDesc = reinterpret_cast<RBX::Reflection::Descriptor*>(ADDRESS_DATASENDRATE_PROP_DESC);
+
+void __fastcall RBX::NetworkSettings__setDataSendRate_hook(RBX::NetworkSettings* _this, void*, float value)
+{
+	if (Config::fpsUnlocked)
+		value = static_cast<float>(Config::desiredFps);
+
+	if (_this->dataSendRate != value)
+	{
+		_this->dataSendRate = value;
+		RBX::Instance__raisePropertyChanged(reinterpret_cast<RBX::Instance*>(_this), dataSendRatePropDesc);
+	}
+}
+
+RBX::NetworkSettings__setPhysicsSendRate_t RBX::NetworkSettings__setPhysicsSendRate_orig =
+	reinterpret_cast<RBX::NetworkSettings__setPhysicsSendRate_t>(ADDRESS_NETWORKSETTINGS_SETPHYSICSSENDRATE);
+
+static const auto physicsSendRatePropDesc = reinterpret_cast<RBX::Reflection::Descriptor*>(ADDRESS_PHYSICSSENDRATE_PROP_DESC);
+
+void __fastcall RBX::NetworkSettings__setPhysicsSendRate_hook(RBX::NetworkSettings* _this, void*, float value)
+{
+	if (Config::fpsUnlocked)
+		value = static_cast<float>(Config::desiredFps);
+
+	if (_this->physicsSendRate != value)
+	{
+		_this->physicsSendRate = value;
+		RBX::Instance__raisePropertyChanged(reinterpret_cast<RBX::Instance*>(_this), physicsSendRatePropDesc);
+	}
+}
+
+RBX::NetworkSettings__setReceiveRate_t RBX::NetworkSettings__setReceiveRate_orig =
+reinterpret_cast<RBX::NetworkSettings__setReceiveRate_t>(ADDRESS_NETWORKSETTINGS_SETRECEIVERATE);
+
+static const auto receiveRatePropDesc = reinterpret_cast<RBX::Reflection::Descriptor*>(ADDRESS_RECEIVERATE_PROP_DESC);
+
+void __fastcall RBX::NetworkSettings__setReceiveRate_hook(RBX::NetworkSettings* _this, void*, double value)
+{
+	if (Config::fpsUnlocked)
+		value = static_cast<double>(Config::desiredFps);
+
+	if (_this->receiveRate != value)
+	{
+		_this->receiveRate = value;
+		RBX::Instance__raisePropertyChanged(reinterpret_cast<RBX::Instance*>(_this), receiveRatePropDesc);
+	}
+}

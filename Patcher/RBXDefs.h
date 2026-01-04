@@ -33,6 +33,13 @@ namespace RBX
 #endif
 	}
 
+	namespace Reflection
+	{
+		// ===== `Descriptor` class =====
+
+		class Descriptor;
+	}
+
 	// ===== `ContentId` class =====
 
 	class ContentId
@@ -59,11 +66,11 @@ namespace RBX
 	typedef const char* (__cdecl* ContentProvider__verifyRequestedScriptSignature_t)(const char* source, const std::string& assetId, bool required);
 	extern ContentProvider__verifyRequestedScriptSignature_t ContentProvider__verifyRequestedScriptSignature_orig;
 
-	// ===== `Workspace` class
+	// ===== `Workspace` class =====
 
 	class Workspace;
 
-	// ===== `AdornRbxGfx` class
+	// ===== `AdornRbxGfx` class =====
 
 	class AdornRbxGfx;
 
@@ -186,6 +193,9 @@ namespace RBX
 	const auto Instance__setParent =
 		reinterpret_cast<void(__thiscall*)(Instance* _this, Instance* parent, bool force)>(ADDRESS_INSTANCE_SETPARENT);
 
+	const auto Instance__raisePropertyChanged =
+		reinterpret_cast<void(__thiscall*)(Instance* _this, Reflection::Descriptor* propDesc)>(ADDRESS_INSTANCE_RAISEPROPERTYCHANGED);
+
 	// ===== `Http` class =====
 
 	class Http;
@@ -241,4 +251,31 @@ namespace RBX
 
 	const auto DataModelJob__sleepTime = 
 		reinterpret_cast<void(__thiscall*)(DataModelJob* _this, double* a2, int a3, double fps)>(ADDRESS_DATAMODELJOB_SLEEPTIME);
+
+	// ===== `NetworkSettings` class =====
+
+	class NetworkSettings
+	{
+	private:
+		char padding1[180];
+	public:
+		float dataSendRate;
+		float physicsSendRate;
+	private:
+		char padding2[4];
+	public:
+		double receiveRate;
+	};
+
+	// HOOKED
+	typedef void(__thiscall* NetworkSettings__setDataSendRate_t)(NetworkSettings* _this, float value);
+	extern NetworkSettings__setDataSendRate_t NetworkSettings__setDataSendRate_orig;
+
+	// HOOKED
+	typedef void(__thiscall* NetworkSettings__setPhysicsSendRate_t)(NetworkSettings* _this, float value);
+	extern NetworkSettings__setPhysicsSendRate_t NetworkSettings__setPhysicsSendRate_orig;
+
+	// HOOKED
+	typedef void(__thiscall* NetworkSettings__setReceiveRate_t)(NetworkSettings* _this, double value);
+	extern NetworkSettings__setReceiveRate_t NetworkSettings__setReceiveRate_orig;
 }

@@ -44,6 +44,11 @@ static const std::unordered_map<void*, void*> hooks = {
     // ===== `RBX::RunService` member function hooks =====
     { &RBX::RunService__step_orig, RBX::RunService__step_hook },
 
+    // ===== `RBX::NetworkSettings` member function hooks =====
+    { &RBX::NetworkSettings__setDataSendRate_orig, RBX::NetworkSettings__setDataSendRate_hook },
+    { &RBX::NetworkSettings__setPhysicsSendRate_orig, RBX::NetworkSettings__setPhysicsSendRate_hook },
+    { &RBX::NetworkSettings__setReceiveRate_orig, RBX::NetworkSettings__setReceiveRate_hook },
+
 #ifdef PATCHER_PLAYER
     // ===== `CRobloxWnd::RenderRequestJob` member function hooks =====
     { &CRobloxWnd__RenderRequestJob__sleepTime_orig, CRobloxWnd__RenderRequestJob__sleepTime_hook },

@@ -37,4 +37,12 @@ namespace RBX
 	// ===== `RBX::RunService` member function hooks =====
 
 	void __fastcall RunService__step_hook(RBX::RunService* _this, void*, double delta);
+
+	// ===== `RBX::NetworkSettings` member function hooks =====
+
+	void __fastcall NetworkSettings__setDataSendRate_hook(RBX::NetworkSettings* _this, void*, float value);
+
+	void __fastcall NetworkSettings__setPhysicsSendRate_hook(RBX::NetworkSettings* _this, void*, float value);
+
+	void __fastcall NetworkSettings__setReceiveRate_hook(RBX::NetworkSettings* _this, void*, double value);
 }
