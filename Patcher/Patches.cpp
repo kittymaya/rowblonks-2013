@@ -168,5 +168,10 @@ void Patches::init()
     // this makes FRM treat VRAM as unsigned to fix the SSAO toggle
     fillBytes(reinterpret_cast<void*>(ADDRESS_FRM_SSAO_VRAM_JUMP), 0x72, 1, PAGE_EXECUTE_READWRITE);
 
+    // ===== TextBox:CaptureFocus fix =====
+    // changes the required security level in the static initializer
+    // for the CaptureFocus func descriptor from RobloxScriptSecurity to None
+    fillBytes(reinterpret_cast<void*>(ADDRESS_TEXTBOX_CAPTUREFOCUS_SECURITY), 0, 1, PAGE_EXECUTE_READWRITE);
+
     initHooks();
 }
