@@ -6,6 +6,11 @@ struct lua_State;
 
 namespace RBX
 {
+	namespace Network
+	{
+		void __cdecl serialize_BrickColor_hook(void* prop, RakNet::BitStream* stream);
+	}
+
 	// ===== `RBX::ContentId` member function hooks =====
 
 	void __fastcall ContentId__convertToLegacyContent_hook(RBX::ContentId* _this, void*, vc90::std::string* baseUrl);
@@ -45,4 +50,10 @@ namespace RBX
 	void __fastcall NetworkSettings__setPhysicsSendRate_hook(RBX::NetworkSettings* _this, void*, float value);
 
 	void __fastcall NetworkSettings__setReceiveRate_hook(RBX::NetworkSettings* _this, void*, double value);
+
+	// ===== RakNet::BitStream (de)serialization hooks =====
+
+	RakNet::BitStream* __cdecl BitStream_deserialize_BrickColor_hook(RakNet::BitStream* stream, RBX::BrickColor* value);
+
+	RakNet::BitStream* __cdecl BitStream_serialize_BrickColor_hook(RakNet::BitStream* stream, RBX::BrickColor* value);
 }

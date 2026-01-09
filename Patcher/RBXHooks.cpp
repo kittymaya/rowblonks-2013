@@ -237,3 +237,50 @@ void __fastcall RBX::NetworkSettings__setReceiveRate_hook(RBX::NetworkSettings* 
 		RBX::Instance__raisePropertyChanged(reinterpret_cast<RBX::Instance*>(_this), receiveRatePropDesc);
 	}
 }
+
+// ===== RakNet::BitStream (de)serialization hooks =====
+
+RBX::BitStream_deserialize_BrickColor_t RBX::BitStream_deserialize_BrickColor_orig =
+	reinterpret_cast<RBX::BitStream_deserialize_BrickColor_t>(ADDRESS_BITSTREAM_DESERIALIZE_BRICKCOLOR);
+
+RakNet::BitStream* __cdecl RBX::BitStream_deserialize_BrickColor_hook(RakNet::BitStream* stream, RBX::BrickColor* value)
+{
+	if (!Config::replicateAllBrickColors)
+		return BitStream_deserialize_BrickColor_orig(stream, value);
+
+	int number;
+	if (!RakNet::BitStream__ReadBits(stream, &number, 32, true))
+	{
+		// TODO?
+	}
+
+	RBX::BrickColor__constructor(value, number);
+	return stream;
+}
+
+RBX::BitStream_serialize_BrickColor_t RBX::BitStream_serialize_BrickColor_orig =
+	reinterpret_cast<RBX::BitStream_serialize_BrickColor_t>(ADDRESS_BITSTREAM_SERIALIZE_BRICKCOLOR);
+
+RakNet::BitStream* __cdecl RBX::BitStream_serialize_BrickColor_hook(RakNet::BitStream* stream, RBX::BrickColor* value)
+{
+	if (!Config::replicateAllBrickColors)
+		return BitStream_serialize_BrickColor_orig(stream, value);
+
+	RakNet::BitStream__WriteBits(stream, &value->number, 32, true);
+	return stream;
+}
+
+RBX::Network::serialize_BrickColor_t RBX::Network::serialize_BrickColor_orig =
+	reinterpret_cast<RBX::Network::serialize_BrickColor_t>(ADDRESS_NETWORK_SERIALIZE_BRICKCOLOR);
+
+static const auto getPropertyBrickColorValue =
+	reinterpret_cast<RBX::BrickColor*(__thiscall*)(void* _this, void*)>(ADDRESS_GET_PROPERTY_BRICKCOLOR_VALUE);
+
+void __cdecl RBX::Network::serialize_BrickColor_hook(void* prop, RakNet::BitStream* stream)
+{
+	char buf[RBX::BrickColor::size];
+	auto brickColor = getPropertyBrickColorValue(prop, buf);
+
+	// this was inlined
+	RBX::BitStream_serialize_BrickColor_hook(stream, brickColor);
+}

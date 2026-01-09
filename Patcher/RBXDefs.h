@@ -4,6 +4,17 @@
 #include "Patches.h"
 #include "LuaDefs.h"
 
+namespace RakNet
+{
+	class BitStream;
+
+	const auto BitStream__ReadBits =
+		reinterpret_cast<bool(__thiscall*)(RakNet::BitStream* _this, void*, size_t, bool)>(ADDRESS_BITSTREAM_READBITS);
+
+	const auto BitStream__WriteBits =
+		reinterpret_cast<bool(__thiscall*)(RakNet::BitStream* _this, void*, size_t, bool)>(ADDRESS_BITSTREAM_WRITEBITS);
+}
+
 namespace RBX
 {
 	namespace Network
@@ -31,6 +42,10 @@ namespace RBX
 		typedef bool(__thiscall* Replicator__RockyItem__write_t)(Replicator__RockyItem* _this, void* bitstream);
 		extern Replicator__RockyItem__write_t Replicator__RockyItem__write_orig;
 #endif
+
+		// HOOKED
+		typedef void(__cdecl* serialize_BrickColor_t)(void* prop, RakNet::BitStream* stream);
+		extern serialize_BrickColor_t serialize_BrickColor_orig;
 	}
 
 	namespace Reflection
@@ -278,4 +293,27 @@ namespace RBX
 	// HOOKED
 	typedef void(__thiscall* NetworkSettings__setReceiveRate_t)(NetworkSettings* _this, double value);
 	extern NetworkSettings__setReceiveRate_t NetworkSettings__setReceiveRate_orig;
+
+	// ===== `BrickColor` class =====
+
+	class BrickColor
+	{
+	public:
+		static constexpr size_t size = 4;
+
+		int number;
+	};
+
+	const auto BrickColor__constructor =
+		reinterpret_cast<BrickColor*(__thiscall*)(BrickColor* _this, int number)>(ADDRESS_BRICKCOLOR_CONSTRUCTOR);
+
+	// ===== RakNet::BitStream (de)serialization =====
+
+	// HOOKED
+	typedef RakNet::BitStream*(__cdecl* BitStream_deserialize_BrickColor_t)(RakNet::BitStream* stream, BrickColor* value);
+	extern BitStream_deserialize_BrickColor_t BitStream_deserialize_BrickColor_orig;
+
+	// HOOKED
+	typedef RakNet::BitStream*(__cdecl* BitStream_serialize_BrickColor_t)(RakNet::BitStream* stream, BrickColor* value);
+	extern BitStream_serialize_BrickColor_t BitStream_serialize_BrickColor_orig;
 }

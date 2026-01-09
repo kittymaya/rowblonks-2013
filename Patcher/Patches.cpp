@@ -62,6 +62,12 @@ static const std::unordered_map<void*, void*> hooks = {
     { &RobloxView__RenderRequestJob__sleepTime_orig, RobloxView__RenderRequestJob__sleepTime_hook },
 #endif
 
+    // ===== RakNet::BitStream (de)serialization hooks =====
+
+    { &RBX::BitStream_deserialize_BrickColor_orig, RBX::BitStream_deserialize_BrickColor_hook },
+    { &RBX::BitStream_serialize_BrickColor_orig, RBX::BitStream_serialize_BrickColor_hook },
+    { &RBX::Network::serialize_BrickColor_orig, RBX::Network::serialize_BrickColor_hook },
+
     // ===== other hooks =====
     { &invalidRequestCheck_orig, invalidRequestCheck_hook },
     { &scriptHashCheck_orig, scriptHashCheck_hook },

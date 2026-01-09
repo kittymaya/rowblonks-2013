@@ -26,6 +26,8 @@ static const std::array<int, 4> allowedFpsValues = { 30, 60, 120, 240 };
 
 bool Config::allowChangingScriptIdentities;
 
+bool Config::replicateAllBrickColors;
+
 void Config::init()
 {
 	gameDirectory.resize(MAX_PATH);
@@ -58,4 +60,6 @@ void Config::init()
 		desiredFps = *fpsIt;
 
 	allowChangingScriptIdentities = ini.GetBoolean("Lua", "AllowChangingScriptIdentities", false);
+
+	replicateAllBrickColors = ini.GetBoolean("Network", "ReplicateAllBrickColors", true);
 }

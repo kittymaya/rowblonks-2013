@@ -14,5 +14,7 @@ namespace Config
 
 	extern bool allowChangingScriptIdentities;
 
+	extern bool replicateAllBrickColors;
+
 	void init();
 }
