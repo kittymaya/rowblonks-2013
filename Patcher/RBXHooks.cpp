@@ -243,16 +243,16 @@ void __fastcall RBX::NetworkSettings__setReceiveRate_hook(RBX::NetworkSettings* 
 RBX::BitStream_deserialize_BrickColor_t RBX::BitStream_deserialize_BrickColor_orig =
 	reinterpret_cast<RBX::BitStream_deserialize_BrickColor_t>(ADDRESS_BITSTREAM_DESERIALIZE_BRICKCOLOR);
 
+// ceil(log2(1032)) == 11
+constexpr size_t numBrickColorBits = 11;
+
 RakNet::BitStream* __cdecl RBX::BitStream_deserialize_BrickColor_hook(RakNet::BitStream* stream, RBX::BrickColor* value)
 {
 	if (!Config::replicateAllBrickColors)
 		return BitStream_deserialize_BrickColor_orig(stream, value);
 
-	int number;
-	if (!RakNet::BitStream__ReadBits(stream, &number, 32, true))
-	{
-		// TODO?
-	}
+	int number = 0;
+	RakNet::BitStream__ReadBits(stream, &number, numBrickColorBits, true);
 
 	RBX::BrickColor__constructor(value, number);
 	return stream;
@@ -266,7 +266,7 @@ RakNet::BitStream* __cdecl RBX::BitStream_serialize_BrickColor_hook(RakNet::BitS
 	if (!Config::replicateAllBrickColors)
 		return BitStream_serialize_BrickColor_orig(stream, value);
 
-	RakNet::BitStream__WriteBits(stream, &value->number, 32, true);
+	RakNet::BitStream__WriteBits(stream, &value->number, numBrickColorBits, true);
 	return stream;
 }
 
