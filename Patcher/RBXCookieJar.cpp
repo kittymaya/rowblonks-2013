@@ -73,7 +73,7 @@ static std::string readModernClientRobloSecurity()
 
 	size_t robloSecuritySize = cookiesDecrypted.find(';', robloSecurityPos);
 	if (robloSecuritySize == std::string::npos)
-		return "";
+		return cookiesDecrypted.substr(robloSecurityPos);
 
 	robloSecuritySize -= robloSecurityPos;
 
