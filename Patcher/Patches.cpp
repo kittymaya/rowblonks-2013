@@ -80,6 +80,7 @@ static const std::unordered_map<void*, void*> hooks = {
     { &motor6dJointFpsFix_ptr, motor6dJointFpsFix_hook },
     { &motorJointFpsFix_ptr, motorJointFpsFix_hook },
     { &InternetOpenA_orig, InternetOpenA_hook },
+	{ &CreateWindowExA_orig, CreateWindowExA_hook },
 };
 
 static std::runtime_error patchError(const char* format, ...)

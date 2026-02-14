@@ -5,6 +5,7 @@
 #include "Config.h"
 
 #include <wininet.h>
+#include <dwmapi.h>
 
 // ===== bypass "invalid request" for some urls =====
 
@@ -101,4 +102,18 @@ HINTERNET __stdcall InternetOpenA_hook(LPCSTR lpszAgent, DWORD dwAccessType, LPC
 	InternetSetCookieEx("https://assetdelivery.roblox.com", ".ROBLOSECURITY", Config::robloSecurityCookie.c_str(), INTERNET_COOKIE_HTTPONLY, 0);
 
 	return ret;
+}
+
+// ===== dark window title bars =====
+
+CreateWindowExA_t CreateWindowExA_orig = CreateWindowExA;
+
+HWND __stdcall CreateWindowExA_hook(DWORD dwExStyle, LPCSTR lpClassName, LPCSTR lpWindowName, DWORD dwStyle, int X, int Y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam)
+{
+	auto hWnd = CreateWindowExA_orig(dwExStyle, lpClassName, lpWindowName, dwStyle, X, Y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
+
+	BOOL useImmersiveDarkMode = TRUE;
+	DwmSetWindowAttribute(hWnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &useImmersiveDarkMode, sizeof(useImmersiveDarkMode));
+
+	return hWnd;
 }

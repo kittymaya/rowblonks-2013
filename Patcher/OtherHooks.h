@@ -41,3 +41,13 @@ typedef HINTERNET(__stdcall* InternetOpenA_t)(LPCSTR lpszAgent, DWORD dwAccessTy
 extern InternetOpenA_t InternetOpenA_orig;
 
 HINTERNET __stdcall InternetOpenA_hook(LPCSTR lpszAgent, DWORD dwAccessType, LPCSTR lpszProxy, LPCSTR lpszProxyBypass, DWORD dwFlags);
+
+// ===== dark window title bars =====
+
+typedef HWND(__stdcall* CreateWindowExA_t)(DWORD dwExStyle, LPCSTR lpClassName, LPCSTR lpWindowName, DWORD dwStyle, int X, int Y, int nWidth, int nHeight,
+    HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam);
+
+extern CreateWindowExA_t CreateWindowExA_orig;
+
+HWND __stdcall CreateWindowExA_hook(DWORD dwExStyle, LPCSTR lpClassName, LPCSTR lpWindowName, DWORD dwStyle, int X, int Y, int nWidth, int nHeight,
+	HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam);
