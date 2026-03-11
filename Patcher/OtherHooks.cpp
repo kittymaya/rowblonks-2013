@@ -4,7 +4,6 @@
 #include "VC90Defs.h"
 #include "Config.h"
 
-#include <wininet.h>
 #include <dwmapi.h>
 
 // ===== bypass "invalid request" for some urls =====
@@ -88,20 +87,6 @@ void __declspec(naked) motorJointFpsFix_hook()
 		// return to original code
 		jmp motorJointFpsFix_jumpOut
 	}
-}
-
-// ===== roblosecurity cookie =====
-
-InternetOpenA_t InternetOpenA_orig = InternetOpenA;
-
-HINTERNET __stdcall InternetOpenA_hook(LPCSTR lpszAgent, DWORD dwAccessType, LPCSTR lpszProxy, LPCSTR lpszProxyBypass, DWORD dwFlags)
-{
-	auto ret = InternetOpenA_orig(lpszAgent, dwAccessType, lpszProxy, lpszProxyBypass, dwFlags);
-
-	// authenticate to avoid assetdelivery rate limits
-	InternetSetCookieEx("https://assetdelivery.roblox.com", ".ROBLOSECURITY", Config::robloSecurityCookie.c_str(), INTERNET_COOKIE_HTTPONLY, 0);
-
-	return ret;
 }
 
 // ===== dark window title bars =====

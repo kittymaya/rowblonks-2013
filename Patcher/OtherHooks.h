@@ -33,15 +33,6 @@ void motor6dJointFpsFix_hook();
 extern void* motorJointFpsFix_ptr;
 void motorJointFpsFix_hook();
 
-// ===== roblosecurity cookie =====
-
-typedef LPVOID HINTERNET;
-
-typedef HINTERNET(__stdcall* InternetOpenA_t)(LPCSTR lpszAgent, DWORD dwAccessType, LPCSTR lpszProxy, LPCSTR lpszProxyBypass, DWORD dwFlags);
-extern InternetOpenA_t InternetOpenA_orig;
-
-HINTERNET __stdcall InternetOpenA_hook(LPCSTR lpszAgent, DWORD dwAccessType, LPCSTR lpszProxy, LPCSTR lpszProxyBypass, DWORD dwFlags);
-
 // ===== dark window title bars =====
 
 typedef HWND(__stdcall* CreateWindowExA_t)(DWORD dwExStyle, LPCSTR lpClassName, LPCSTR lpWindowName, DWORD dwStyle, int X, int Y, int nWidth, int nHeight,

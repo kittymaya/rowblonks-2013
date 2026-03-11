@@ -2,6 +2,7 @@
 #include "RBXCookieJar.h"
 #include "Config.h"
 
+#include <wininet.h>
 #include <wincrypt.h>
 #include <shlobj.h>
 
@@ -84,4 +85,7 @@ void RBXCookieJar::setRobloSecurity()
 {
 	if (Config::readModernClientCookieJar && Config::robloSecurityCookie.empty())
 		Config::robloSecurityCookie = readModernClientRobloSecurity();
+
+	// authenticate to avoid assetdelivery rate limits
+	InternetSetCookieEx("https://assetdelivery.roblox.com", ".ROBLOSECURITY", Config::robloSecurityCookie.c_str(), INTERNET_COOKIE_HTTPONLY, 0);
 }
