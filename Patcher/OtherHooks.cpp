@@ -97,8 +97,11 @@ HWND __stdcall CreateWindowExA_hook(DWORD dwExStyle, LPCSTR lpClassName, LPCSTR 
 {
 	auto hWnd = CreateWindowExA_orig(dwExStyle, lpClassName, lpWindowName, dwStyle, X, Y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
 
-	BOOL useImmersiveDarkMode = TRUE;
-	DwmSetWindowAttribute(hWnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &useImmersiveDarkMode, sizeof(useImmersiveDarkMode));
+	if (!hWndParent)
+	{
+		BOOL useImmersiveDarkMode = TRUE;
+		DwmSetWindowAttribute(hWnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &useImmersiveDarkMode, sizeof(useImmersiveDarkMode));
+	}
 
 	return hWnd;
 }

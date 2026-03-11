@@ -79,7 +79,9 @@ static const std::unordered_map<void*, void*> hooks = {
     { &getSecsPerPhysicsStep_orig, getSecsPerPhysicsStep_hook },
     { &motor6dJointFpsFix_ptr, motor6dJointFpsFix_hook },
     { &motorJointFpsFix_ptr, motorJointFpsFix_hook },
+#ifdef PATCHER_PLAYER
 	{ &CreateWindowExA_orig, CreateWindowExA_hook },
+#endif
 };
 
 static std::runtime_error patchError(const char* format, ...)
